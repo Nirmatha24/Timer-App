@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f0e8" />
+    <meta name="description" content="Ember Focus is a calm, task-aware focus timer for deep work and intentional breaks." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Ember Focus</title>
+  </head>
+  <body data-view="focus">
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Ember Focus home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28"><path d="M14 3.5c1.7 3.4 6.1 5.4 6.1 11A6.1 6.1 0 1 1 8 15.7c0-2.6 1.1-4.8 3.1-6.8.2 2 1.1 3 2.1 3.7-.1-3.4.2-6.3.8-9.1Z" /></svg></span>
+        <span>ember<span class="brand-dot">.</span></span>
+      </a>
+
+      <nav class="view-nav" aria-label="Workspace">
+        <button class="view-tab active" type="button" data-view="focus" aria-current="page">Focus</button>
+        <button class="view-tab" type="button" data-view="plan">Plan</button>
+        <button class="view-tab" type="button" data-view="calendar">Calendar</button>
+      </nav>
+
+      <div class="topbar-actions">
+        <div class="today-pill" aria-label="Today's focus time"><span class="pulse-dot" aria-hidden="true"></span><strong id="headerMinutes">0</strong> min today</div>
+        <button class="room-button" id="roomButton" type="button" aria-label="Open ambient focus rooms"><span class="room-wave" aria-hidden="true">〰</span><span id="roomButtonLabel">Room</span></button>
+        <button class="icon-button fullscreen-launch" id="fullscreenButton" type="button" aria-label="Enter full screen focus mode" title="Focus mode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M21 16v5h-5" /></svg></button>
+        <button class="icon-button" id="settingsButton" type="button" aria-label="Open settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z" /></svg></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="workspace-view active" id="focusView" data-view-panel="focus">
+        <div class="app-shell">
+          <section class="timer-panel" aria-labelledby="sessionHeading">
+            <div class="eyebrow-row"><p class="eyebrow"><span></span> Your focus space</p><p class="shortcut-hint"><kbd>Space</kbd> start / pause</p></div>
+            <div class="mode-tabs" role="tablist" aria-label="Timer mode">
+              <button class="mode-tab active" type="button" role="tab" aria-selected="true" data-mode="focus">Focus</button>
+              <button class="mode-tab" type="button" role="tab" aria-selected="false" data-mode="short">Short break</button>
+              <button class="mode-tab" type="button" role="tab" aria-selected="false" data-mode="long">Long break</button>
+            </div>
+            <div class="timer-stage"><div class="timer-orbit" id="timerOrbit"><div class="orbit-tick tick-one"></div><div class="orbit-tick tick-two"></div><div class="orbit-tick tick-three"></div><div class="timer-face"><p class="session-count" id="sessionCount">Session 1 of 4</p><time class="timer-value" id="timerValue" datetime="PT25M">25:00</time><p class="timer-label" id="sessionHeading">Ready when you are</p></div></div></div>
+            <div class="timer-controls">
+              <button class="round-button" id="resetButton" type="button" aria-label="Reset timer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6M5.5 15.5A7.5 7.5 0 1 0 6 7" /></svg></button>
+              <button class="primary-button" id="startButton" type="button"><span class="button-icon" aria-hidden="true"><svg class="play-icon" viewBox="0 0 24 24"><path d="m9 7 8 5-8 5V7Z" /></svg><svg class="pause-icon" viewBox="0 0 24 24"><path d="M8 7v10M16 7v10" /></svg></span><span id="startButtonText">Start focus</span></button>
+              <button class="round-button" id="skipButton" type="button" aria-label="Skip session"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 7 7 5-7 5V7Zm8 0v10" /></svg></button>
+            </div>
+            <button class="current-task" id="currentTask" type="button" aria-label="Select active task"><span class="current-task-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5 9 16l10-10" /></svg></span><span class="task-copy"><span>Working on</span><strong id="currentTaskName">Choose a task to begin</strong></span><span class="change-task">Change</span></button>
+          </section>
+
+          <aside class="side-panel">
+            <section class="tasks-card" aria-labelledby="tasksHeading">
+              <div class="section-heading"><div><p class="eyebrow"><span></span> Make it concrete</p><h2 id="tasksHeading">Today’s tasks</h2></div><button class="small-icon-button" id="clearCompletedButton" type="button" aria-label="Clear completed tasks"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v5m4-5v5" /></svg></button></div>
+              <form class="task-form" id="taskForm"><label class="sr-only" for="taskInput">New task</label><input id="taskInput" type="text" maxlength="90" placeholder="What deserves your attention?" autocomplete="off" /><label class="estimate-field" title="Estimated Pomodoros"><span class="sr-only">Estimated Pomodoros</span><input id="estimateInput" type="number" min="1" max="24" value="1" inputmode="numeric" /><span>p</span></label><button class="add-task-button" type="submit" aria-label="Add task"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button></form>
+              <div class="task-list" id="taskList" aria-live="polite"></div>
+              <div class="empty-state" id="emptyState"><div class="empty-art" aria-hidden="true"><span></span><span></span><span></span></div><p>A clear desk. Add one meaningful task.</p></div>
+            </section>
+            <section class="insights-card" aria-labelledby="insightsHeading"><div class="section-heading compact"><div><p class="eyebrow"><span></span> Gentle momentum</p><h2 id="insightsHeading">Today’s rhythm</h2></div><span class="date-label" id="dateLabel"></span></div><div class="stats-grid"><div class="stat-block"><span>Focus</span><strong><b id="focusMinutes">0</b> min</strong></div><div class="stat-block"><span>Sessions</span><strong><b id="finishedSessions">0</b> done</strong></div><div class="stat-block"><span>Tasks</span><strong><b id="completedTasks">0</b> closed</strong></div></div><div class="daily-goal"><div class="goal-copy"><span>Daily goal</span><strong id="goalCopy">0 of 4 sessions</strong></div><div class="goal-track" role="progressbar" aria-label="Daily focus goal" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><span id="goalProgress"></span></div></div></section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="workspace-view" id="planView" data-view-panel="plan" hidden>
+        <div class="planner-shell">
+          <section class="planner-intro"><p class="eyebrow"><span></span> Blue-sky planning</p><h1>Give the day a shape.</h1><p>Estimate a few Pomodoros, pick the next meaningful task, then return to focus when the plan feels clear.</p><div class="planner-stats"><span><strong id="plannedPomos">0</strong> planned Pomodoros</span><span><strong id="plannedTasks">0</strong> open tasks</span></div></section>
+          <section class="planner-card"><div class="section-heading"><div><p class="eyebrow"><span></span> Today’s queue</p><h2>Plan the work</h2></div></div><form class="planner-add-form" id="planTaskForm"><input id="planTaskInput" type="text" maxlength="90" placeholder="Add an intention" autocomplete="off" /><label><span class="sr-only">Estimated Pomodoros</span><input id="planEstimateInput" type="number" min="1" max="24" value="1" inputmode="numeric" /><small>pomos</small></label><button class="save-button" type="submit">Add task</button></form><div class="planner-task-list" id="plannerTaskList"></div></section>
+          <aside class="plan-detail-card"><p class="eyebrow"><span></span> Now selected</p><div id="planSelection" class="plan-selection"><span class="selection-orb">+</span><h2>Select a task</h2><p>Click a task to make it the focus for your next session.</p></div><button class="outline-button" id="focusSelectedButton" type="button">Focus selected task</button></aside>
+        </div>
+      </section>
+
+      <section class="workspace-view" id="calendarView" data-view-panel="calendar" hidden>
+        <div class="calendar-shell"><section class="calendar-card"><div class="calendar-heading"><div><p class="eyebrow"><span></span> Your work, remembered</p><h1 id="calendarMonth">Month</h1></div><div class="month-controls"><button class="round-button small-round" id="previousMonthButton" type="button" aria-label="Previous month">‹</button><button class="month-today-button" id="todayMonthButton" type="button">Today</button><button class="round-button small-round" id="nextMonthButton" type="button" aria-label="Next month">›</button></div></div><div class="calendar-weekdays" aria-hidden="true"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div><div class="calendar-grid" id="calendarGrid"></div><p class="calendar-legend"><span></span> More colour means more focused minutes.</p></section><aside class="day-detail-card"><p class="eyebrow"><span></span> Day detail</p><h2 id="selectedDayTitle">Today</h2><div class="day-summary"><div><strong id="dayFocusMinutes">0</strong><span>focus min</span></div><div><strong id="daySessionCount">0</strong><span>sessions</span></div><div><strong id="dayTaskCount">0</strong><span>tasks closed</span></div></div><div class="day-session-list" id="daySessionList"></div></aside></div>
+      </section>
+    </main>
+
+    <footer><p>Small intervals. Meaningful days.</p><p id="footerStatus">Everything is saved on this device.</p></footer>
+
+    <dialog class="settings-dialog" id="settingsDialog"><form method="dialog" class="settings-card" id="settingsForm"><div class="dialog-heading"><div><p class="eyebrow"><span></span> Tune your pace</p><h2>Timer settings</h2></div><button class="icon-button dialog-close" value="cancel" aria-label="Close settings" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button></div><div class="settings-fields"><label>Focus minutes<input name="focus" type="number" min="1" max="120" required /></label><label>Short break<input name="short" type="number" min="1" max="60" required /></label><label>Long break<input name="long" type="number" min="1" max="90" required /></label><label>Daily session goal<input name="dailyGoal" type="number" min="1" max="20" required /></label></div><div class="toggle-row"><div><strong>Auto-start next session</strong><span>Keep your rhythm moving without another tap.</span></div><label class="switch"><input name="autoStart" type="checkbox" /><span></span></label></div><div class="toggle-row"><div><strong>Session sounds</strong><span>Different gentle tones at the start and end of focus or breaks.</span></div><label class="switch"><input name="sound" type="checkbox" /><span></span></label></div><label class="volume-row"><span><strong>Chime volume</strong><small>Soft, but present</small></span><input name="volume" type="range" min="0" max="100" step="5" /></label><div class="premium-settings"><p class="eyebrow"><span></span> Personalise</p><label>App theme<select name="theme"><option value="ember">Ember</option><option value="ocean">Ocean</option><option value="forest">Forest</option><option value="lavender">Lavender</option><option value="midnight">Midnight</option></select></label><label>Custom accent<input name="accent" type="color" /></label><label>Clock skin<select name="clockSkin"><option value="flip">Split Flip</option><option value="midnight">Midnight</option><option value="paper">Paper</option></select></label></div><div class="toggle-row"><div><strong>Floating mini timer</strong><span>Keep a compact timer visible while planning.</span></div><label class="switch"><input name="miniTimer" type="checkbox" /><span></span></label></div><div class="dialog-actions"><button class="text-button" id="restoreDefaultsButton" type="button">Restore defaults</button><button class="save-button" value="default" type="submit">Save changes</button></div></form></dialog>
+
+    <dialog class="room-dialog" id="roomDialog"><div class="settings-card room-card"><div class="dialog-heading"><div><p class="eyebrow"><span></span> Ambient focus rooms</p><h2>Set the atmosphere</h2></div><button class="icon-button" id="closeRoomButton" type="button" aria-label="Close ambient rooms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button></div><div class="room-grid" id="roomGrid"><button data-room="rain" type="button">Rain<small>soft rainfall</small></button><button data-room="cafe" type="button">Café<small>low conversation</small></button><button data-room="forest" type="button">Forest<small>wind & birds</small></button><button data-room="white" type="button">White noise<small>clear the edges</small></button><button data-room="brown" type="button">Brown noise<small>deep and warm</small></button></div><label class="ambient-volume"><span><strong>Room volume</strong><small id="ambientStatus">Choose a room to begin</small></span><input id="ambientVolume" type="range" min="0" max="100" value="35" step="5" /></label></div></dialog>
+
+    <dialog class="task-dialog" id="taskDialog"><form method="dialog" class="settings-card task-edit-card" id="taskEditForm"><div class="dialog-heading"><div><p class="eyebrow"><span></span> Refine the plan</p><h2>Edit task</h2></div><button class="icon-button dialog-close" value="cancel" aria-label="Close task editor" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button></div><label class="edit-field">Task name<input name="name" maxlength="90" required /></label><label class="edit-field">Estimated Pomodoros<input name="estimate" type="number" min="1" max="24" required /></label><p class="edit-receipt" id="editReceipt">0 sessions recorded</p><div class="dialog-actions"><button class="text-button" id="taskCompleteButton" type="button">Mark complete</button><button class="save-button" value="default" type="submit">Save task</button></div></form></dialog>
+
+    <section class="focus-overlay" id="focusOverlay" aria-hidden="true">
+      <div class="focus-overlay-top"><span class="overlay-brand"><span class="brand-mark"><svg viewBox="0 0 28 28"><path d="M14 3.5c1.7 3.4 6.1 5.4 6.1 11A6.1 6.1 0 1 1 8 15.7c0-2.6 1.1-4.8 3.1-6.8.2 2 1.1 3 2.1 3.7-.1-3.4.2-6.3.8-9.1Z" /></svg></span> ember.</span><div><button class="overlay-view-button" id="overlayViewButton" type="button">Show clock</button><button class="overlay-close" id="fullscreenExitButton" type="button" aria-label="Exit full screen focus mode">×</button></div></div>
+      <div class="overlay-content"><div class="overlay-timer-display" id="overlayTimerDisplay"><div class="standby-deck timer-deck" aria-label="Pomodoro timer"><article class="flip-card"><p id="overlayModeLabel">Focus session</p><time id="overlayTimerMinutes">25</time></article><article class="flip-card minute-card"><p id="overlayTaskName">Choose a task to begin</p><time id="overlayTimerSeconds">00</time><small id="overlaySessionCount">1/4</small></article></div><strong>Stay with this one thing.</strong></div><div class="overlay-clock-display" id="overlayClockDisplay" hidden><div class="standby-deck" aria-label="Current time"><article class="flip-card"><p id="clockDateLabel">05/08/26</p><time id="clockHour">14</time></article><article class="flip-card minute-card"><p id="clockWeekday">Wednesday</p><time id="clockMinute">27</time><small id="clockSeconds">11</small></article></div><strong>Time to be present.</strong></div><div class="overlay-controls"><button class="overlay-icon-button" id="overlayResetButton" type="button" aria-label="Reset timer">↺</button><button class="overlay-start-button" id="overlayStartButton" type="button">Start focus</button><button class="overlay-icon-button" id="overlaySkipButton" type="button" aria-label="Skip session">↠</button></div><p class="overlay-shortcut">Press <kbd>Space</kbd> to start or pause · <kbd>Esc</kbd> to leave</p></div>
+    </section>
+
+    <button class="mini-timer" id="miniTimer" type="button" aria-label="Open full screen focus mode" hidden><span id="miniTimerMode">Focus</span><strong id="miniTimerValue">25:00</strong><i></i></button>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>

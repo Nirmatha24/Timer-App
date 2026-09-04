@@ -1,0 +1,12 @@
+{
+  "name": "Ember Focus",
+  "short_name": "Ember",
+  "description": "A calm, task-aware focus timer for deep work.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f0e8",
+  "theme_color": "#f4f0e8",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
